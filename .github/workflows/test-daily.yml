@@ -1,28 +1,23 @@
-name: Continuous Integration
+name: Continuous Daily Integration
 on:
   schedule:
-    - cron: '0 0 * * *'
+    # Nightly builds for Linux (cheapest)
+    - cron: '0 8 * * *'
+      timezone: 'America/Vancouver'
   pull_request:
   push:
     branches:
       - master
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 22.x
+        node-version: 24.x
     - run: npm install
     - run: npm run build
     - run: xvfb-run -a npm test
-      if: runner.os == 'Linux'
-    - run: npm test
-      if: runner.os != 'Linux'
