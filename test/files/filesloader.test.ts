@@ -30,7 +30,7 @@ suite("FilesLoader Tests", () => {
 
     test("loadDataFiles rejects coverage data that is not valid UTF-8 @unit", async () => {
         sinon.stub(fs, "readFile").callsFake(
-            (_: number | PathLike, cb: (err: NodeJS.ErrnoException | null, data: Buffer) => void) => {
+            (_: number | PathLike, cb: (err: NodeJS.ErrnoException | null, data: Buffer<ArrayBuffer>) => void) => {
                 return cb(null, Buffer.from([0xc3, 0x28]));
             },
         );
